@@ -130,7 +130,7 @@ function drawPerfectCircle() { // 畫出來與評分
 
   // 計算平均半徑
   const distances = points.map(p => Math.hypot(p.x - cx, p.y - cy));
-  const avgR = distances.reduce((a, b) => a + b) / distances.length; // 平均
+  const avgR = distances.reduce((a, b) => a + b) / distances.length; // reduce 累積 再平均
 
   // 平均誤差 → 分數
   const avgError = distances.reduce((sum, d) => sum + Math.abs(d - avgR), 0) / distances.length;
@@ -141,12 +141,15 @@ function drawPerfectCircle() { // 畫出來與評分
 
   // 畫手畫軌跡（淡灰）
   ctx.strokeStyle = "#ccc";
-  ctx.beginPath();
+  ctx.beginPath(); // 繪製開始前都要宣告
   points.forEach((p, i) => { // p : 座標 i : 索引
-    if (i === 0) ctx.moveTo(p.x, p.y); // 第一個時
+    if (i === 0) ctx.moveTo(p.x, p.y); // moveto 表示第一個點
     else ctx.lineTo(p.x, p.y); // 畫線
   });
+  // ctx.closePath() 如果用了會連回起點
+  // ctx.fill() 如果用了會填滿所圍區域 若沒有圍好會沒效果 
   ctx.stroke(); // 渲染 lineTo
+  
 
   // 畫完美圓（紅色）
   ctx.strokeStyle = "red";
@@ -157,7 +160,7 @@ function drawPerfectCircle() { // 畫出來與評分
   // 畫圓心
   ctx.fillStyle = "black";
   ctx.beginPath();
-  ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 3, 0, Math.PI * 2); // arc 畫圓用 半徑=3
   ctx.fill();
 
   // 顯示分數
